@@ -1,1 +1,3 @@
 remote_theme: mlpapers/minimal
+readme_index:
+  with_frontmatter: true
