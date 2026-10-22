@@ -60,12 +60,15 @@ tags:
 - **MAML** - Meta-learns initial parameters across tasks so a few gradient updates on a new task's examples produce an adapted predictor. [Finn et al. 2017](<https://proceedings.mlr.press/v70/finn17a.html> "Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks; ICML").
 - **In-context learning in GPT-3** - Specifies tasks and demonstrations in the input text, with no gradient updates at deployment. Few-shot conditioning changes the context; fine-tuning changes parameters. [Brown et al. 2020](<https://arxiv.org/abs/2005.14165> "Language Models are Few-Shot Learners; NeurIPS").
 
-## Learning with limited labels
+<a id="learning-with-limited-labels"></a>
+
+## Learning with limited or unreliable labels
 
 - **Mean Teacher** - Averages model weights to produce teacher targets for consistency training on perturbed inputs. This uses unlabeled observations during fitting; its benefit depends on the architecture and the relation between labeled and unlabeled data. [Tarvainen and Valpola 2017](<https://arxiv.org/abs/1703.01780> "Mean teachers are better role models: Weight-averaged consistency targets improve semi-supervised deep learning results; NeurIPS").
 - **FixMatch** - Uses confident predictions on weakly augmented unlabeled images as targets for strongly augmented versions. Combines pseudo-labeling with consistency; the confidence threshold and augmentation policy determine which unlabeled evidence enters training. [Sohn et al. 2020](<https://arxiv.org/abs/2001.07685> "FixMatch: Simplifying Semi-Supervised Learning with Consistency and Confidence; NeurIPS").
 - **BALD active learning** - Chooses labels expected to reduce posterior uncertainty about the model, using disagreement among predictive distributions. Houlsby et al. derive it for Gaussian-process classification; querying labels differs from passive few-shot adaptation. [Houlsby et al. 2011](<https://arxiv.org/abs/1112.5745> "Bayesian Active Learning for Classification and Preference Learning; arXiv").
 - **Semi-supervised evaluation** - Oliver et al. find that out-of-class unlabeled examples can degrade tested methods and that strong supervised baselines are often underreported. Match backbones and label-selection budgets; more unlabeled data need not improve performance. [Oliver et al. 2018](<https://arxiv.org/abs/1804.09170> "Realistic Evaluation of Deep Semi-Supervised Learning Algorithms; NeurIPS").
+- **Confident Learning** - Uses out-of-sample probabilities to estimate the joint distribution of observed and latent labels and rank suspected errors. Assumes class-conditional label noise; exact recovery also needs constraints on prediction errors. [Northcutt et al. 2021](<https://arxiv.org/abs/1911.00068v6> "Confident Learning: Estimating Uncertainty in Dataset Labels; JAIR"); [code](<https://github.com/cleanlab/cleanlab>).
 
 ## Continual adaptation and model merging
 
