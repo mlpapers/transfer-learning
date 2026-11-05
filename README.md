@@ -14,9 +14,8 @@ tags:
 ## Pretraining and task adaptation
 
 - **ULMFiT** - Pretrains a language model, adapts it to target text, then tunes a classifier. Layer-specific learning rates and gradual unfreezing control how pretrained weights change. [Howard and Ruder 2018](<https://aclanthology.org/P18-1031/> "Universal Language Model Fine-tuning for Text Classification; ACL").
-- **BERT** - Masked-token and next-sentence prediction pretrain a bidirectional encoder; task-specific output layers and encoder fine-tuning transfer it to language understanding tasks. [Devlin et al. 2019](<https://aclanthology.org/N19-1423/> "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding; NAACL").
-- **T5** - Casts NLP tasks as text-to-text prediction; compares pretraining objectives, architectures, data, and transfer strategies within a shared framework. [Raffel et al. 2020](<https://jmlr.org/papers/v21/20-074.html> "Exploring the Limits of Transfer Learning with a Unified Text-to-Text Transformer; JMLR").
 - **Domain- and task-adaptive pretraining** - Continues language-model pretraining on unlabeled domain text or task-specific text before supervised fine-tuning; studies both separately and together. [Gururangan et al. 2020](<https://aclanthology.org/2020.acl-main.740/> "Don’t Stop Pretraining: Adapt Language Models to Domains and Tasks; ACL").
+- **Language pretraining** - See [NLP](https://mlpapers.org/nlp/#contextual-pretraining) for BERT and [text-to-text learning](https://mlpapers.org/nlp/#sequence-generation-and-translation) for T5.
 - **Language-defined classification** - CLIP uses descriptions of candidate classes for zero-shot prediction without target-dataset fine-tuning; see [Multi-View Learning](https://mlpapers.org/multiview-learning/).
 
 ## Frozen features and fine-tuning
@@ -25,6 +24,7 @@ tags:
 - **How transferable are features?** - Layer-transfer experiments separate task specialization from optimization difficulties caused by splitting co-adapted neurons; transferability depends on layer and task distance. [Yosinski et al. 2014](<https://arxiv.org/abs/1411.1792> "How transferable are features in deep neural networks?; NeurIPS").
 - **L2-SP** - Regularizes fine-tuning toward pretrained parameter values rather than zero, explicitly encouraging retention of the source solution. [Li et al. 2018](<https://proceedings.mlr.press/v80/li18a.html> "Explicit Inductive Bias for Transfer Learning with Convolutional Networks; ICML").
 - **Linear probing then fine-tuning** - Fits a linear head before updating the whole model. Studies how fine-tuning can distort useful pretrained features and hurt out-of-distribution accuracy despite improving in-distribution accuracy. [Kumar et al. 2022](<https://arxiv.org/abs/2202.10054> "Fine-Tuning can Distort Pretrained Features and Underperform Out-of-Distribution; ICLR").
+- **FINO** - Adapts visual representations to scientific domains using discrete or continuous metadata alongside self-supervised learning. [Gardès et al. 2026](<https://arxiv.org/abs/2606.05107> "Who Needs Labels? Adapting Vision Foundation Models With the Metadata You Already Have; NeurIPS").
 
 ## Parameter-efficient adaptation
 
@@ -58,10 +58,8 @@ tags:
 
 ## Few-shot and in-context adaptation
 
-- **Matching Networks** - Learns to predict a query label from a small labeled support set; adapts to new classes through the support examples without fine-tuning the network. [Vinyals et al. 2016](<https://arxiv.org/abs/1606.04080> "Matching Networks for One Shot Learning; NeurIPS").
-- **Prototypical Networks** - Learns an embedding space and represents each class by its mean support embedding; classifies queries by distances to these prototypes. [Snell et al. 2017](<https://arxiv.org/abs/1703.05175> "Prototypical Networks for Few-shot Learning; NeurIPS").
-- **MAML** - Meta-learns initial parameters across tasks so a few gradient updates on a new task's examples produce an adapted predictor. [Finn et al. 2017](<https://proceedings.mlr.press/v70/finn17a.html> "Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks; ICML").
-- **In-context learning in GPT-3** - Specifies tasks and demonstrations in the input text, with no gradient updates at deployment. Few-shot conditioning changes the context; fine-tuning changes parameters. [Brown et al. 2020](<https://arxiv.org/abs/2005.14165> "Language Models are Few-Shot Learners; NeurIPS").
+- **Learning to adapt** - See [Meta-Learning](https://mlpapers.org/meta-learning/) for Matching Networks, Prototypical Networks, MAML and their comparisons.
+- **In-context learning** - See [NLP](https://mlpapers.org/nlp/#scaling-and-in-context-learning) for GPT-3 task demonstrations without gradient updates.
 
 <a id="learning-with-limited-labels"></a>
 
@@ -75,12 +73,14 @@ tags:
 - **FixMatch** - Uses confident predictions on weakly augmented unlabeled images as targets for strongly augmented versions. Combines pseudo-labeling with consistency; the confidence threshold and augmentation policy determine which unlabeled evidence enters training. [Sohn et al. 2020](<https://arxiv.org/abs/2001.07685> "FixMatch: Simplifying Semi-Supervised Learning with Consistency and Confidence; NeurIPS").
 - **Confident Learning** - Uses out-of-sample probabilities to estimate the joint distribution of observed and latent labels and rank suspected errors. Assumes class-conditional label noise; exact recovery also needs constraints on prediction errors. [Northcutt et al. 2021](<https://arxiv.org/abs/1911.00068v6> "Confident Learning: Estimating Uncertainty in Dataset Labels; JAIR"); [code](<https://github.com/cleanlab/cleanlab>).
 
-## Continual adaptation and model merging
+<a id="continual-adaptation-and-model-merging"></a>
 
-- **Learning without Forgetting** - Trains on new-task data while distilling the previous model's old-task outputs on those same inputs. Retains old-task supervision without storing its original training examples. [Li and Hoiem 2016](<https://arxiv.org/abs/1606.09282> "Learning without Forgetting; ECCV").
-- **Elastic weight consolidation** - Penalizes changes to parameters important for previous tasks using a diagonal Fisher-weighted quadratic penalty; a regularization approach to reducing catastrophic forgetting. [Kirkpatrick et al. 2017](<https://arxiv.org/abs/1612.00796> "Overcoming catastrophic forgetting in neural networks; PNAS").
-- **Dark Experience Replay** - Stores past examples and model logits, then matches those logits during later training. Combines replay with distillation when task boundaries blur; its comparisons require accounting for memory and replay computation. [Buzzega et al. 2020](<https://arxiv.org/abs/2004.07211> "Dark Experience for General Continual Learning: a Strong, Simple Baseline; NeurIPS").
+## Model merging
+
+- **Model Soups** - Averages weights of compatible models fine-tuned from a shared pretrained initialization. Produces one model for inference; weight averaging is a different operation from averaging predictions. [Wortsman et al. 2022](<https://proceedings.mlr.press/v162/wortsman22a.html> "Model soups: averaging weights of multiple fine-tuned models improves accuracy without increasing inference time; ICML").
 - **Task arithmetic** - Defines task vectors as fine-tuned weights minus a shared pretrained initialization. Adding, subtracting or combining these vectors edits model behavior without another gradient-training run. [Ilharco et al. 2023](<https://arxiv.org/abs/2212.04089> "Editing Models with Task Arithmetic; ICLR").
+    - **TIES-Merging** - Merges fine-tuned models by trimming small parameter changes, resolving conflicting update signs and combining sign-aligned changes; targets interference between task-specific updates. [Yadav et al. 2023](<https://arxiv.org/abs/2306.01708> "TIES-Merging: Resolving Interference When Merging Models; NeurIPS").
+- **Sequential adaptation** - See [Continual Learning](https://mlpapers.org/continual-learning/) for retention, replay and interference across task sequences.
 
 ## Evidence and evaluation
 
